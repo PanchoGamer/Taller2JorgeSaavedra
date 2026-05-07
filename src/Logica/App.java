@@ -6,6 +6,8 @@ package Logica;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ public class App {
 	public static List<AltoMando> medals = new ArrayList<>();
 	public static List<Pokemon> p = new ArrayList<>();
 	
-	public static void main(String[] args) throws FileNotFoundException 
+	public static void main(String[] args) throws IOException 
 	{
 		
 		cargarPokedex();
@@ -45,12 +47,12 @@ public class App {
 			
 			if (opcion == 1)
 			{
-				cargarPartida();
+				cargarPartida(s);
 			}
 			
 			else if (opcion == 2)
 			{
-				empezarPartida();
+				empezarPartida(s);
 			}
 			
 		} while (opcion != 3);
@@ -58,7 +60,7 @@ public class App {
 		s.close();
 	}
 	
-	public static void cargarPartida() throws FileNotFoundException
+	public static void cargarPartida(Scanner s) throws FileNotFoundException
 	{
 		File f = new File("txts/Registros.txt");
 		Scanner arch = new Scanner(f);
@@ -68,7 +70,9 @@ public class App {
 		{
 			String linea = arch.nextLine();
 			System.out.println("\nPartida Cargada\n");
+			partida(s);
 		}
+		
 		else
 		{
 			System.out.println("\nNo existe Partida Guardada\n");
@@ -77,9 +81,19 @@ public class App {
 		arch.close();
 	}
 	
-	public static void empezarPartida()
+	public static void empezarPartida(Scanner s) throws IOException
 	{
-		System.out.println("Empieza :D");
+		System.out.print("Ingrese apodo de jugador: ");
+		String apodo = s.nextLine();
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter("txts/Registros.txt"));
+		
+		bw.write(apodo);
+		bw.newLine();
+		bw.close();
+		partida(s);
+		
+		
 	}
 	
 	public static void cargarPokedex() throws FileNotFoundException
@@ -108,5 +122,38 @@ public class App {
 			p.add(pP);
 		}
 		
+	}
+	
+	public static void partida(Scanner s)
+	{
+		int option = 0;
+		do
+		{
+			System.out.println("1) Revisar Equipo");
+			System.out.println("2) Salir a capturar");
+			System.out.println("3) Acceso al PC");
+			System.out.println("4) Retar un gimansio");
+			System.out.println("5) Desafiar al Alto Mando");
+			System.out.println("6) Curar Pokemon");
+			System.out.println("7) Guardar");
+			System.out.println("8) Guardar y Salir");
+			
+			String entry = s.nextLine();
+			
+			try
+			{
+				option = Integer.parseInt(entry);
+			} 
+			catch (NumberFormatException e)
+			{
+				System.out.println("Ingrese opcion valida");
+			}
+			
+			if (option == 1)
+			{
+				revisarEquipo();
+			}
+			
+		} while (option == 8);
 	}
 }

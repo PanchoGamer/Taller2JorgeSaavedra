@@ -11,6 +11,8 @@ public class Pokemon {
 	private int defEsp;
 	private int vel;
 	private String type;
+	private int estTot;
+	private boolean vivo;
 	
 	public Pokemon(String nom, String habitat, double prob, int life, int atq, int def, int atqEsp, int defEsp, int vel, String type) {
 		this.nom = nom;
@@ -23,6 +25,8 @@ public class Pokemon {
 		this.defEsp = defEsp;
 		this.vel = vel;
 		this.type = type;
+		estTot = (life+atq+def+atqEsp+defEsp+vel);
+		this.vivo = true;
 	}
 
 	public String getNom() 
@@ -74,7 +78,16 @@ public class Pokemon {
 	{
 		return type;
 	}
+
+	public void derrotado()
+	{
+		this.vivo = false;
+	}
 	
+	@Override
+	public String toString() {
+		return "" + nom + "|" + type + "|Stats totales: " + estTot;
+	}
 	
 	
 }

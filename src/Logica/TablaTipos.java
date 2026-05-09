@@ -1,6 +1,15 @@
 package Logica;
 
 public class TablaTipos {
+	private Pokemon p1;
+	private Pokemon p2;
+	
+	 public TablaTipos(Pokemon p1, Pokemon p2) 
+	 {
+		this.p1 = p1;
+		this.p2 = p2;
+	}
+	 
 	 // Matriz de efectividad
     private static final double[][] EFECTIVIDAD = {
         // NOR  FUE  AGU  PLA  ELE  HIE  LUC  VEN  TIE  VOL  PSI  BIC  ROC  FAN  DRA  ACE  SIN  HAD
@@ -22,5 +31,14 @@ public class TablaTipos {
         {  1.0, 0.5, 0.5, 1.0, 0.5, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 1.0, 2.0 }, // ACERO
         {  1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 0.5 }, // SINIESTRO
         {  1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 1.0 }  // HADA
-    };    
+    };
+    
+    public static double ataque(int index1, int index2)
+    {
+    	double multi = 0;
+    	
+    	multi = EFECTIVIDAD[index1][index2];
+    	
+    	return multi;
+    }
 }

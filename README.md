@@ -44,7 +44,7 @@ Se nos permite el uso de ciertas librerias tales como:
 Unicamente se tiene el paquete de "Logica", el cual mantiene todos las clases necesarias.
 
 ### Clases
-- App: La cual maneja y posee todo (Listas, valores, metodos, etc), inicia el simulador y accede a los metodos necesarios para avanzar en el.
+- App: Maneja e inicia el proyecto, ademas de poseer todo (Listas, valores, metodos, etc), accede a los metodos necesarios para avanzar en el simulador.
 - Pokemon: Nos indica todo lo util y necesario que tiene un Pokemon para asi poder instanciar las veces que sean necesarias.
 - Gimnacios: Nos permite instanciar los 8 gimnacios que estan ahi basandose en el txts que se nos fue dado.
 - Tabla Tipos: La tabla cual se nos fue entregada para poder realizar calculos de efectividad para los combates.

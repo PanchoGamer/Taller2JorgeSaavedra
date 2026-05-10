@@ -51,6 +51,7 @@ Unicamente se tiene el paquete de "Logica", el cual mantiene todos las clases ne
 - Alto Mando: Nos muestra los Altos Mandos a enfrentar basandose en sus txt para poder instanciarlos y ser guardados para usarlos cuando sea necesario.
 
 ## Instrucciones de Ejecucion
-Para poder iniciar el simulador desde cero recomiendo de primera mano el borrar todo lo que se encuentre en el txt de "Registros.txt" el cual se encuentra dentro del proyecto en la carpeta "txts"
+Para poder iniciar el simulador desde cero recomiendo de primera mano el borrar todo lo que se encuentre en el txt de "Registros.txt" el cual se encuentra dentro del proyecto en la carpeta "txts".
+
 Inicie una nueva partida desde 0 y empiece a experimentar con las opciones.
 

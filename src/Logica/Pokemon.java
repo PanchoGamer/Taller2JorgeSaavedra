@@ -78,6 +78,16 @@ public class Pokemon {
 	{
 		return type;
 	}
+	
+	public boolean getVivo()
+	{
+		return vivo;
+	}
+	
+	public int getEstTot()
+	{
+		return estTot;
+	}
 
 	public void derrotado()
 	{

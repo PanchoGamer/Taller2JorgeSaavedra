@@ -52,4 +52,12 @@ public class Gimnacios {
 	{
 		Pokemones.add(p);
 	}
+
+	@Override
+	public String toString() {
+		return "" + getLider() + " - Estado: " + getEstado();
+	}
+
+	
+	
 }

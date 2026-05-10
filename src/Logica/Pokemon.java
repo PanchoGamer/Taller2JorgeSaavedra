@@ -94,6 +94,11 @@ public class Pokemon {
 		this.vivo = false;
 	}
 	
+	public void curar()
+	{
+		this.vivo = true;
+	}
+	
 	@Override
 	public String toString() {
 		return "" + nom + "|" + type + "|Stats totales: " + estTot;

@@ -276,6 +276,11 @@ public class App {
 				gimnacio(s);
 			}
 			
+			else if (option == 6)
+			{
+				curarPokemones();
+			}
+			
 			else if (option == 7 || option == 8)
 			{
 				guardar();
@@ -720,6 +725,21 @@ public class App {
 		
 		return gano;
 		
+	}
+	
+	public static void curarPokemones()
+	{
+		for(Pokemon pok: pPropio)
+		{
+			pok.curar();
+		}
+		
+		for(Pokemon pok: pc)
+		{
+			pok.curar();
+		}
+		
+		System.out.println("Se curaron todos tus Pokemons :D");
 	}
 	
 	public static void guardar() throws IOException

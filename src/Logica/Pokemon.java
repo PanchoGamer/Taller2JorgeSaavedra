@@ -99,10 +99,20 @@ public class Pokemon {
 		this.vivo = true;
 	}
 	
+	public String Estado()
+	{
+		if (this.vivo)
+		{
+			return "Vivo";
+		}
+		else
+		{
+			return "Debilitado";
+		}
+	}
+		
 	@Override
 	public String toString() {
-		return "" + nom + "|" + type + "|Stats totales: " + estTot;
+		return "" + nom + "|" + type + "|Stats totales: " + estTot + "| Estado: " + Estado();
 	}
-	
-	
 }

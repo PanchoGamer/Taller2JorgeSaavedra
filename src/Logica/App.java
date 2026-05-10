@@ -80,26 +80,25 @@ public class App {
 			System.out.println("Bienvenido " + partes[0] + "!");
 			if(partes.length > 1 && !partes[1].equalsIgnoreCase("null"))
 			{
-				for(int i = 0; i < partes[0].length(); i++)
+				for(int i = 1; i < partes.length; i++)
 				{
 					for(Gimnacios g: gim)
 					{
 						if (g.getLider().equalsIgnoreCase(partes[i]))
 						{
-							g.setEstado("Derrotado");
+							g.derrotado();
 							medals.add(g);
 						}
 					}
 				}
 			}
 			
-			int pokemonesLista = 0;
 			while (arch.hasNextLine())
 			{
 				linea = arch.nextLine();
 				partes = linea.split(";");
 				
-				if (pokemonesLista <= 6)
+				if (pPropio.size() <= 5)
 				{
 					Pokemon pTemp = buscarPokemon(partes[0]);
 					pPropio.add(pTemp);
@@ -276,6 +275,11 @@ public class App {
 				gimnacio(s);
 			}
 			
+			else if (option == 5)
+			{
+				altoMando(s);
+			}
+			
 			else if (option == 6)
 			{
 				curarPokemones();
@@ -364,8 +368,15 @@ public class App {
 			}
 			else
 			{
-				pc.add(encontrado);
-				System.out.println("\n" + encontrado.getNom() + " capturado y mandado a la PC!!\n");
+				if (pPropio.contains(encontrado) || pc.contains(encontrado))
+				{
+					System.out.println("\nNo puedes capturar un pokemon ya capturado!!\n");
+				}
+				else 
+				{
+					pc.add(encontrado);
+					System.out.println("\n" + encontrado.getNom() + " capturado y mandado a la PC!!\n");
+				}
 			}
 		}
 		
@@ -471,13 +482,14 @@ public class App {
 			Gimnacios g = new Gimnacios(id,lider,estado,cantPok);
 			for(int i = 0; i < cantPok; i++)
 			{
-				String nomP = partes[4];
+				String nomP = partes[4+i];
 				for (Pokemon pok : p)
 				{
 					if (pok.getNom().equalsIgnoreCase(nomP))
 					{
-						Pokemon po = pok;
+						Pokemon po = new Pokemon(pok.getNom(), pok.getHabitat(), pok.getProb(), pok.getLife(),pok.getAtq(),pok.getDef(),pok.getAtqEsp(),pok.getDefEsp(),pok.getVel(),pok.getType());
 						g.agregarPokemon(po);
+						break;
 					}
 				}
 			}
@@ -495,7 +507,7 @@ public class App {
 				{
 					if(g.getLider().equalsIgnoreCase(partes[i]))
 					{
-						g.setEstado("Derrotado");
+						g.derrotado();
 					}
 				}
 			}
@@ -525,44 +537,44 @@ public class App {
 		} catch (NumberFormatException e)
 		{
 			System.out.println("Ingrese un valor valido");
+			return;
 		}
 		
-		if(eleccion > 1)
+		if (eleccion < 1 || eleccion > gim.size())
+	    {
+	        System.out.println("Opcion invalida");
+	        return;
+	    }
+		
+		if (eleccion > 1 && gim.get(eleccion-2).getEstado().equalsIgnoreCase("Sin derrotar"))
 		{
-			if (gim.get(eleccion-1).getEstado().equalsIgnoreCase("Sin derrotar"))
-			{
-				System.out.println("No puedes ir si no derrotas al lider anterior!");
-			}
-			else
-			{
-				if (eleccion >= 1 || eleccion <= gim.size()-1 )
-				{
-					boolean gano = simularCombate(eleccion,s);
-					
-					if (gano)
-					{
-						gim.get(eleccion-1).setEstado("Derrotado");
-						
-					}
-				}
-			}
+			System.out.println("No puedes ir con " + gim.get(eleccion-1).getLider() +  " si no derrotas al lider anterior!");
+		    return;
 		}
 		
+		if (gim.get(eleccion-1).getEstado().equals("Derrotado"))
+		{
+			System.out.println("Ya le has ganado a " + gim.get(eleccion-1).getLider());
+			return;
+		}
 		
+		else
+		{
+			simularCombate(eleccion-1,s);
+		}
 	}
 	
-	public static boolean simularCombate(int el, Scanner s)
+	public static void simularCombate(int el, Scanner s)
 	{
 		boolean gano = false;
-		List<Pokemon> j1 = pPropio;
-		List<Pokemon> j2 = gim.get(el).getPokemones();
 		
 		Pokemon sele1 = null;
 		Pokemon sele2 = null;
 		System.out.println("Desafiando a " + gim.get(el).getLider() + "!!");
 		System.out.println("");
 		
-		do {
+		do 
+		{
 
 			for (Pokemon pok: pPropio)
 			{
@@ -589,16 +601,17 @@ public class App {
 			}
 			
 			int accion = 0;
-			System.out.println(apodo + " saca a " + sele1.getNom());
-			System.out.println(gim.get(el).getLider() + " saca a " + sele2.getNom());
 			
 			//Combate
 			do 
 			{
+				System.out.println(apodo + " saca a " + sele1.getNom());
+				System.out.println(gim.get(el).getLider() + " saca a " + sele2.getNom());
+				
 				double stat1 = 0;
 				System.out.println("\nQue haras?");
 				System.out.println("\n1) Combatir");
-				System.out.println("2)Cambiar");
+				System.out.println("2) Cambiar");
 				System.out.println("3) Rendirse");
 				System.out.print(">");
 				
@@ -629,38 +642,58 @@ public class App {
 						}
 					}
 					stat1 = sele1.getEstTot() * tip.ataque(index1, index2);
+					System.out.println(sele1.getNom() + "| Stats:" + stat1);
+					System.out.println(sele2.getNom() + "| Stats:" + sele2.getEstTot());
+					System.out.println("");
 					
 					if (stat1 > sele2.getEstTot())
 					{
-						int i = 0;
-						for (Pokemon pok: pPropio)
+						for (Pokemon pok: gim.get(el).getPokemones())
 						{
-							
 							if (pok.getNom().equalsIgnoreCase(sele2.getNom()))
 							{
 								pok.derrotado();
-								j2.remove(i);
+								
 							}
-							i++;
+						}
+						if (!sele2.getVivo())
+						{
+							sele2 = null;
+							for (Pokemon pok: gim.get(el).getPokemones())
+							{
+								if (pok.getVivo())
+								{
+									sele2 = pok;
+									break;
+								}
+							}
+						}
+						
+						if (sele2 == null)
+						{
+							gano = true;
+							break;
 						}
 					}
-					
 					else
 					{
-						int i = 0;
+						sele1.derrotado();
+						sele1 = null;
 						for (Pokemon pok: pPropio)
 						{
-							
-							if (pok.getNom().equalsIgnoreCase(sele1.getNom()))
+							if (pok.getVivo())
 							{
-								pok.derrotado();
-								j1.remove(i);
+								sele1 = pok;
+								break;
 							}
-							i++;
+						}
+						
+						if (sele1 == null)
+						{
+							break;
 						}
 					}
 				}
-				
 				else if (accion == 2)
 				{
 					System.out.println("\n");
@@ -668,36 +701,47 @@ public class App {
 					int cambiado = 0;
 					for(Pokemon pok: pPropio)
 					{
-						if (pok.getVivo())
-						{
-							System.out.println(i + ") " + pok);
-							i++;
-						}
+
+						System.out.println(i + ") " + pok + " | Estado: " + pok.Estado());
+						i++;
 					}
 					
-					if (i != 0)
+					if (verificarVivos(pPropio,sele1))
 					{
 						System.out.println("Que pokemon quieres elegir?");
+						System.out.print("> ");
 						
 						String cambio = s.nextLine();
 						
 						try
 						{
-							cambiado = Integer.parseInt(cambio);
+							cambiado = Integer.parseInt(cambio)-1;
 						} catch(NumberFormatException e)
 						{
 							System.out.println("Ingrese solo entre los valores seleccionados");
 						}
 						
-						if (cambiado < 1 || cambiado > i)
+						if (cambiado < 0 || cambiado > i)
 						{
 							System.out.println("Ingrese solo entre los valores seleccionados");
 						}
+						
 						else
 						{
-							for (Pokemon pok : pPropio)
+							if (pPropio.get(cambiado) == sele1)
 							{
-								continue;
+								System.out.println("Ya tienes ese pokemon en combate!\n");
+							}
+							else
+							{
+								if (pPropio.get(cambiado).getVivo())
+								{
+									sele1 = pPropio.get(cambiado);
+								}
+								else
+								{
+									System.out.println("Ese pokemon ya esta derrotado");
+								}
 							}
 						}
 					}
@@ -707,24 +751,35 @@ public class App {
 					}
 					
 				}
+				else if (accion == 3)
+				{
+					break;
+				}
 				
-			} while (accion == 1 || accion == 3);
+				
+			} while (accion != 3 && !gano && sele1 != null && sele2 != null);
 			
 			if (accion == 3)
 			{
-				System.out.println("\nEl ganador es " + gim.get(el).getLider() + "!!");
+				System.out.println("El ganador es " + gim.get(el).getLider() + "!!\n");
 				gano = false;
 			}
 			
-			if(j2.isEmpty())
+			else if (accion == 1)
 			{
-				gano = true;
+				if (gano)
+				{
+					System.out.println("El ganador es " + apodo + "!!\n");
+					gim.get(el).derrotado();
+					medals.add(gim.get(el));
+				}
+				else
+				{
+					System.out.println("\nEl ganador es " + gim.get(el).getLider() + "!!\n");
+				}
 			}
 			
-		} while (!j1.isEmpty() || !j2.isEmpty());
-		
-		return gano;
-		
+		} while (false);
 	}
 	
 	public static void curarPokemones()
@@ -750,6 +805,15 @@ public class App {
 		if (medals.isEmpty())
 		{
 			bw.write(";null");
+		}
+		
+		else
+		{
+			for (Gimnacios g: medals)
+			{
+				bw.write(";" + g.getLider());
+			}
+
 		}
 		
 		bw.newLine();
@@ -791,6 +855,62 @@ public class App {
 		
 		System.out.println("Guardado Exitoso :D");
 		bw.close();
+	}
+	
+	public static boolean verificarVivos(List<Pokemon> list, Pokemon seleccionado)
+	{
+		for (Pokemon pok: list)
+		{
+			if(pok.getVivo() && !pok.getNom().equalsIgnoreCase(seleccionado.getNom()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static void altoMando(Scanner s) throws FileNotFoundException
+	{
+		
+		if (medals.size() < 6)
+		{
+			System.out.println("Todavia te falta derrotar gimnacios");
+		}
+		else
+		{
+			File fA = new File("txts/Alto Mando.txt");
+			Scanner sA = new Scanner(fA);
+			
+			while (sA.hasNextLine())
+			{
+				String linea = sA.nextLine();
+				String[] partes = linea.split(";");
+				int id = Integer.parseInt(partes[0]);
+				String nom = partes[1];
+				AltoMando aM = new AltoMando(id,nom);
+				for (int i = 0; i < 6; i++)
+				{
+					String nomP = partes[2+i];
+					
+					for(Pokemon pok: p)
+					{
+						if (pok.getNom().equalsIgnoreCase(nomP))
+						{
+							Pokemon pCopia = new Pokemon(pok.getNom(), pok.getHabitat(), pok.getProb(), pok.getLife(),pok.getAtq(),pok.getDef(),pok.getAtqEsp(),pok.getDefEsp(),pok.getVel(),pok.getType());
+							aM.agregarPokemon(pCopia);
+						}
+					}
+				}
+				System.out.println(aM);
+			}
+			sA.close();
+		}
+		
+	}
+	
+	public static void simularAltoMando(Scanner s)
+	{
+		
 	}
 	
 }

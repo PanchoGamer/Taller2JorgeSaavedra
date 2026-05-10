@@ -43,9 +43,9 @@ public class Gimnacios {
 		return Pokemones;
 	}
 	
-	public void setEstado(String estado) 
+	public void derrotado() 
 	{
-		this.estado = estado;
+		this.estado = "Derrotado";
 	}
 
 	public void agregarPokemon(Pokemon p)
@@ -57,7 +57,4 @@ public class Gimnacios {
 	public String toString() {
 		return "" + getLider() + " - Estado: " + getEstado();
 	}
-
-	
-	
 }
